@@ -16,7 +16,7 @@ const CaseSchema = new mongoose.Schema({
     econtact: { type: String, required: true }, 
   },
   
-  // Suspect details
+  
   suspect: {
     name: { type: String, default: "Unknown" },
     img: { type: String, default: "https://via.placeholder.com/150" },
@@ -28,8 +28,6 @@ const CaseSchema = new mongoose.Schema({
     identificationDetails: { type: String, default: "N/A" },
     arrestStatus: { type: String, default: "Unknown" },
   },
-  
-  // Evidence details
   evidence: {
     evidenceType: { type: String, required: true },
     evidenceDescription: { type: String, required: true },
