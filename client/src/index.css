@@ -4,7 +4,7 @@
 
 /* ========================================== TAILWIND STYLES */
 @layer base {
-  *{
+  * {
     color: white;
   }
   /* Remove scrollbar */
@@ -212,6 +212,7 @@
   .shad-textArea {
     @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
+  
 
   .shad-combobox-item {
     @apply data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 !important;
@@ -230,7 +231,7 @@
   }
 
   .shad-dialog {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-dark-400 border-dark-500 text-white !important ;
   }
 
   .shad-dialog button {
