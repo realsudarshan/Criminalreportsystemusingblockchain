@@ -18,7 +18,7 @@ contract CriminalRecordStorage {
 
         emit RecordStored(mongoId, hash);
     }
-
+      
    
     function getHash(string calldata mongoId) external view returns (string memory) {
         string memory hash = mongoIdToHash[mongoId];
