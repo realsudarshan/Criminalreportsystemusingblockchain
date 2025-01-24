@@ -4,7 +4,7 @@ async function main() {
     const [deployer] = await hre.ethers.getSigners();
     console.log("Deploying with account:", deployer.address);
 
-    const DataHashStorage = await hre.ethers.getContractFactory("DataStorage");
+    const DataHashStorage = await hre.ethers.getContractFactory("CriminalRecordStorage");
     const dataHashStorage = await DataHashStorage.deploy();
     
     await dataHashStorage.deploymentTransaction();
