@@ -10,13 +10,11 @@ function getCanonicalRepresentation(data) {
     suspect: {
       name: data.suspect.name,
       img: data.suspect.img,
-      alias: data.suspect.alias,
       gender: data.suspect.gender,
       age: data.suspect.age,
       address: data.suspect.address,
       contact: data.suspect.contact,
       identificationDetails: data.suspect.identificationDetails,
-      arrestStatus: data.suspect.arrestStatus
     },
     evidence: {
       evidenceType: data.evidence.evidenceType,

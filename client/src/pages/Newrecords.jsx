@@ -1,12 +1,10 @@
 import RecordRegisterForm from "@/components/forms/RecordRegisterForm";
-import { getUser } from "@/lib/actions/user.actions";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { ShieldCheck } from "lucide-react";
 
 const Newrecords = () => {
-  const user = getUser(1234);
-  console.log(user);
-
+  const { user } = useAuth0();
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">

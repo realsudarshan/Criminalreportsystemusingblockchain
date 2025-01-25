@@ -22,7 +22,6 @@ export const getAllRecords = () => {
         suspect: {
           name: "Unknown",
           img: "https://via.placeholder.com/150",
-          alias: "N/A",
           gender: "N/A",
           age: "N/A",
           address: "N/A",

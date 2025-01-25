@@ -15,7 +15,6 @@ const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, CONTRACT_ABI,
 
 exports.addToDB = async (req, res) => {
   const newCase = new Case(req.body);
-
   try {
     const savedCase = await newCase.save();
     res.status(201).json({ message: 'Case added to database', case: savedCase });

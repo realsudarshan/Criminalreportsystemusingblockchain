@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormControl } from "@/components/ui/form";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from "@/lib/axios";
 import {
   CrimeType,
   EvidenceType,
@@ -14,82 +15,78 @@ import {
   IdentificationTypes,
   RegisterFormDefaultValues,
 } from "@/constants";
-import { PatientFormValidation } from "@/lib/validation";
+import { RegisterFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import { FileUploader } from "../FileUploader";
+import { Officer } from "@/constants";
 import SubmitButton from "../SubmitButton";
 import { Button } from "../ui/button";
 
-const RecordRegisterForm = ({ user }) => {
+const RecordRegisterForm = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { logout } = useAuth0();
+  const { logout, user } = useAuth0();
 
   const form = useForm({
-    resolver: zodResolver(PatientFormValidation),
+    resolver: zodResolver(RegisterFormValidation),
     defaultValues: {
       ...RegisterFormDefaultValues,
-      // name: user.name,
-      // email: user.email,
-      // phone: user.phone,
     },
   });
   const onSubmit = async (values) => {
+    console.log(values);
     setIsLoading(true);
-
-    // Store file info in form data as
-    let formData;
-    if (
-      values.identificationDocument &&
-      values.identificationDocument?.length > 0
-    ) {
-      const blobFile = new Blob([values.identificationDocument[0]], {
-        type: values.identificationDocument[0].type,
-      });
-
-      formData = new FormData();
-      formData.append("blobFile", blobFile);
-      formData.append("fileName", values.identificationDocument[0].name);
-    }
-
     try {
-      // const patient = {
-      //   userId: user.$id,
-      //   name: values.name,
-      //   email: values.email,
-      //   phone: values.phone,
-      //   birthDate: new Date(values.birthDate),
-      //   gender: values.gender,
-      //   address: values.address,
-      //   occupation: values.occupation,
-      //   emergencyContactName: values.emergencyContactName,
-      //   emergencyContactNumber: values.emergencyContactNumber,
-      //   primaryPhysician: values.primaryPhysician,
-      //   insuranceProvider: values.insuranceProvider,
-      //   insurancePolicyNumber: values.insurancePolicyNumber,
-      //   allergies: values.allergies,
-      //   currentMedication: values.currentMedication,
-      //   familyMedicalHistory: values.familyMedicalHistory,
-      //   pastMedicalHistory: values.pastMedicalHistory,
-      //   identificationType: values.identificationType,
-      //   identificationNumber: values.identificationNumber,
-      //   identificationDocument: values.identificationDocument
-      //     ? formData
-      //     : undefined,
-      //   privacyConsent: values.privacyConsent,
-      // };
-
-      // const newPatient = await registerPatient(patient);
-
+      const crime_id = "CR-" + Math.floor(1000 + Math.random() * 9000);
+      const oname = Officer.find((officer) => officer.email === user?.email);
+      const crimeReport = {
+        crimeID: crime_id,
+        title: values.title,
+        type: values.type,
+        date: values.date,
+        location: values.location,
+        victim: {
+          name: values.victim.name,
+          contact: values.victim.contact,
+          email: values.victim.email,
+          address: values.victim.address,
+          gender: values.victim.gender,
+          econtact: values.victim.econtact,
+          ename: values.victim.ename,
+        },
+        suspect: {
+          name: values.suspect.name,
+          img: "/pp.jpg",
+          gender: values.suspect.gender,
+          age: values.suspect.age,
+          address: values.suspect.address,
+          contact: values.suspect.contact,
+          identificationType: values.suspect.identificationType,
+          identificationNumber: values.suspect.identificationNumber,
+        },
+        evidence: {
+          evidenceType: values.evidence.evidenceType,
+          evidenceDescription: values.evidence.evidenceDescription,
+          evidenceImage: "/id.jpg",
+        },
+        status: values.status,
+        officerInCharge: values.officerInCharge,
+        firno: values.firno,
+        filedby: oname.name,
+        reportStatus: values.reportStatus,
+        caseDescription: values.caseDescription,
+      };
+      console.log(crimeReport);
+      const res = axios.post("/app",crimeReport);
+      console.log(res);
+      console.log(crimeReport);
       alert("New Record created");
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
-
     setIsLoading(false);
   };
 
@@ -102,15 +99,15 @@ const RecordRegisterForm = ({ user }) => {
         <section className="space-y-4">
           <h1 className="header">Welcome</h1>
           <div className="flex w-full justify-between items-center">
-          <p className="text-dark-700">Add new records</p>
-          <Button
-          variant="outline"
-            onClick={() =>
-              logout({ logoutParams: { returnTo: window.location.origin } })
-            }
-          >
-            Logout
-          </Button>
+            <p className="text-dark-700">Add new records</p>
+            <Button
+              variant="outline"
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+            >
+              Logout
+            </Button>
           </div>
         </section>
 
@@ -147,7 +144,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
               control={form.control}
-              name="doc"
+              name="date"
               label="Date of Crime"
             />
           </div>
@@ -156,7 +153,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="firno"
+              name="location"
               label="Address"
               placeholder="Location of Crime"
             />
@@ -191,7 +188,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
-            name="casedescription"
+            name="caseDescription"
             label="Case Description"
             placeholder="Description of the Crime"
           />
@@ -205,7 +202,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             control={form.control}
-            name="name"
+            name="victim.name"
             placeholder="John Doe"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
@@ -216,7 +213,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="email"
+              name="victim.email"
               label="Email address"
               placeholder="johndoe@gmail.com"
               iconSrc="/assets/icons/email.svg"
@@ -226,18 +223,18 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
               control={form.control}
-              name="phone"
+              name="victim.contact"
               label="Phone Number"
               placeholder="(555) 123-4567"
             />
           </div>
 
-          {/* BirthDate & Gender */}
+          {/* Gender */}
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.SKELETON}
               control={form.control}
-              name="gender"
+              name="victim.gender"
               label="Gender"
               renderSkeleton={(field) => (
                 <FormControl>
@@ -265,7 +262,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="address"
+              name="victim.address"
               label="Address"
               placeholder="14 street, New york, NY - 5101"
             />
@@ -273,9 +270,9 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="occupation"
+              name="victim.occupation"
               label="Occupation"
-              placeholder=" Software Engineer"
+              placeholder="Software Engineer"
             />
           </div>
 
@@ -284,7 +281,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="emergencyContactName"
+              name="victim.ename"
               label="Emergency contact name"
               placeholder="Guardian's name"
             />
@@ -292,7 +289,7 @@ const RecordRegisterForm = ({ user }) => {
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
               control={form.control}
-              name="emergencyContactNumber"
+              name="victim.econtact"
               label="Emergency contact number"
               placeholder="(555) 123-4567"
             />
@@ -306,39 +303,37 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             control={form.control}
-            name="name"
+            name="suspect.name"
             placeholder="John Doe"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
           />
 
-          {/* EMAIL & PHONE */}
+          {/* AGE & PHONE */}
           <div className="flex flex-col gap-6 xl:flex-row">
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
-              name="email"
-              label="Email address"
-              placeholder="johndoe@gmail.com"
-              iconSrc="/assets/icons/email.svg"
-              iconAlt="email"
-            />
-
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
               control={form.control}
-              name="phone"
+              name="suspect.contact"
               label="Phone Number"
               placeholder="(555) 123-4567"
             />
+
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name="suspect.age"
+              label="Age"
+              placeholder="25"
+            />
           </div>
 
-          {/* BirthDate & Gender */}
+          {/* Gender */}
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.SKELETON}
               control={form.control}
-              name="gender"
+              name="suspect.gender"
               label="Gender"
               renderSkeleton={(field) => (
                 <FormControl>
@@ -361,28 +356,20 @@ const RecordRegisterForm = ({ user }) => {
             />
           </div>
 
-          {/* Address & Occupation */}
+          {/* Address & Type */}
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="address"
+              name="suspect.address"
               label="Address"
               placeholder="14 street, New york, NY - 5101"
-            />
-
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
-              name="occupation"
-              label="Occupation"
-              placeholder=" Software Engineer"
             />
           </div>
           <CustomFormField
             fieldType={FormFieldType.SELECT}
             control={form.control}
-            name="identificationType"
+            name="suspect.identificationType"
             label="Identification Type"
             placeholder="Select identification type"
           >
@@ -396,7 +383,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             control={form.control}
-            name="identificationNumber"
+            name="suspect.identificationNumber"
             label="Identification Number"
             placeholder="123456789"
           />
@@ -404,7 +391,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.SKELETON}
             control={form.control}
-            name="identificationDocument"
+            name="suspect.img"
             label="Scanned Copy of Identification Document"
             renderSkeleton={(field) => (
               <FormControl>
@@ -422,7 +409,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.SELECT}
             control={form.control}
-            name="evidenceType"
+            name="evidence.evidenceType"
             label="Evidence Type"
             placeholder="Select Evidence type"
           >
@@ -436,7 +423,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             control={form.control}
-            name="identificationNumber"
+            name="evidence.evidenceDescription"
             label="Evidence Description"
             placeholder="Description of the Evidence"
           />
@@ -444,7 +431,7 @@ const RecordRegisterForm = ({ user }) => {
           <CustomFormField
             fieldType={FormFieldType.SKELETON}
             control={form.control}
-            name="identificationDocument"
+            name="evidence.evidenceImage"
             label="Photo of Evidence"
             renderSkeleton={(field) => (
               <FormControl>

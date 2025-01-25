@@ -5,68 +5,58 @@ export const UserFormValidation = z.object({
   fingerprint: z.string(),
 });
 
-
-export const PatientFormValidation = z.object({
-  name: z
-    .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(50, "Name must be at most 50 characters"),
-  email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
-  birthDate: z.coerce.date(),
-  gender: z.enum(["Male", "Female", "Other"]),
-  address: z
-    .string()
-    .min(5, "Address must be at least 5 characters")
-    .max(500, "Address must be at most 500 characters"),
-  occupation: z
-    .string()
-    .min(2, "Occupation must be at least 2 characters")
-    .max(500, "Occupation must be at most 500 characters"),
-  emergencyContactName: z
-    .string()
-    .min(2, "Contact name must be at least 2 characters")
-    .max(50, "Contact name must be at most 50 characters"),
-  emergencyContactNumber: z
-    .string()
-    .refine(
-      (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Invalid phone number"
-    ),
-  primaryPhysician: z.string().min(2, "Select at least one doctor"),
-  insuranceProvider: z
-    .string()
-    .min(2, "Insurance name must be at least 2 characters")
-    .max(50, "Insurance name must be at most 50 characters"),
-  insurancePolicyNumber: z
-    .string()
-    .min(2, "Policy number must be at least 2 characters")
-    .max(50, "Policy number must be at most 50 characters"),
-  allergies: z.string().optional(),
-  currentMedication: z.string().optional(),
-  familyMedicalHistory: z.string().optional(),
-  pastMedicalHistory: z.string().optional(),
-  identificationType: z.string().optional(),
-  identificationNumber: z.string().optional(),
-  identificationDocument: z.string().optional(),
-  treatmentConsent: z
-    .boolean()
-    .default(false)
-    .refine((value) => value === true, {
-      message: "You must consent to treatment in order to proceed",
-    }),
-  disclosureConsent: z
-    .boolean()
-    .default(false)
-    .refine((value) => value === true, {
-      message: "You must consent to disclosure in order to proceed",
-    }),
-  privacyConsent: z
-    .boolean()
-    .default(false)
-    .refine((value) => value === true, {
-      message: "You must consent to privacy in order to proceed",
-    }),
+export const RegisterFormValidation = z.object({
+  crimeID: z.string().optional(),
+  title: z.string().nonempty("Title is required"),
+  type: z.string().nonempty("Type is required"),
+  date: z.coerce.date(),
+  location: z.string().nonempty("Location is required"),
+  victim: z.object({
+    name: z.string().nonempty("Name is required"),
+    contact: z
+      .string()
+      .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    email: z.string().email("Invalid email address"),
+    address: z.string().nonempty("Address is required"),
+    occupation: z.string().nonempty("Occupation is required"),
+    gender: z.string().nonempty("Required"),
+    econtact: z
+      .string()
+      .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    ename: z.string().nonempty("Emergency contact name is required"),
+  }),
+  suspect: z.object({
+    name: z.string().min(5, "Name must be at least 5 characters"),
+    img: z.string().optional(),
+    contact: z
+      .string()
+      .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    gender: z.string().nonempty("Required"),
+    address: z
+      .string()
+      .min(5, "Address must be at least 5 characters")
+      .max(50, "Address must be at most 50 characters"),
+    age: z.string().nonempty("Age is required"),
+    identificationType: z.string().nonempty("Identification type is required"),
+    identificationNumber: z.string().optional(),
+  }),
+  evidence: z.object({
+    evidenceType: z.string().nonempty("Evidence type is required"),
+    evidenceDescription: z
+      .string()
+      .nonempty("Evidence description is required"),
+      evidenceImage: z.string().optional(),
+  }),
+  status: z.enum([
+    "closed",
+    "saved",
+    "underinvestigation",
+    "drafted",
+    "notsaved",
+  ]),
+  officerInCharge: z.string().nonempty("Officer in charge is required"),
+  firno: z.string().nonempty("FIR number is required"),
+  filedby: z.string().optional(),
+  reportStatus: z.enum(["saved", "notsaved"]),
+  caseDescription: z.string().nonempty("Case description is required"),
 });
