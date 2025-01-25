@@ -82,11 +82,11 @@ exports.addToBlockchain = async (req, res) => {
     }
 
     const canonicalData = getCanonicalRepresentation(crimeCase);
-
+console.log("Data from server",canonicalData)
     const reportHash = ethers.keccak256(
       ethers.toUtf8Bytes(JSON.stringify(canonicalData))
     );
-
+console.log(reportHash)
     try {
       const tx = await contract.storeRecord(
         crimeCase._id.toString(),

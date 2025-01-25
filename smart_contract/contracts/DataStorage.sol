@@ -13,7 +13,7 @@ contract CriminalRecordStorage {
         require(bytes(mongoId).length > 0, "MongoDB ID cannot be empty");
         require(bytes(hash).length > 0, "Hash cannot be empty");
         require(bytes(mongoIdToHash[mongoId]).length == 0, "Record already exists");
-
+ 
         mongoIdToHash[mongoId] = hash;
 
         emit RecordStored(mongoId, hash);
