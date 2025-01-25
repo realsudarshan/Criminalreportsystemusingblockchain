@@ -59,14 +59,6 @@ T --> U
 - Metamask browser extension
 - Ethereum wallet
 
-# Local Setup Guide
-
-## Prerequisites
-- Node.js (v16+)
-- npm or yarn
-- Metamask browser extension
-- Ethereum wallet
-
 ## Setup Steps
 
 ### 1. Alchemy RPC URL Setup
