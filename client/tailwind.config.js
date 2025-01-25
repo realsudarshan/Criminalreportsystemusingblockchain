@@ -39,6 +39,7 @@ export default {
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
+        arial: ["Arial", "sans-serif"],
       },
       backgroundImage: {
         closed: "url('/assets/images/appointments-bg.png')",
