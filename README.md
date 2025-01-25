@@ -10,9 +10,10 @@ A secure portal for police authorities to manage crime records, ensuring transpa
 # Technology Stack
 - Frontend: React.js
 - Backend: Node.js (Express.js)
-- Database: MongoDB & Blockchain(Solidity)
-- Blockchain/Smart Contract:Solidity
-- Testnet:Etherum Sepolia
+- Database: MongoDB 
+- Blockchain/Smart Contract: Solidity
+- Testnet: Ethereum Sepolia
+
 ## System Overview
 
 The Criminal Report Management System consists of four main components:
