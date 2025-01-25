@@ -92,9 +92,6 @@ export const columns = [
               {records.status === "closed" && isKey && (
                 <ActionModal type="Save" title="Save Records" />
               )}
-              {isKey && (
-                <ActionModal type="Edit" title="Edit Records" description="" />
-              )}
             </>
           )}
 

@@ -4,7 +4,6 @@ A secure portal for police authorities to manage crime records, ensuring transpa
 # Features
 - Add, view, and manage detailed crime records.
 - Immutable crime records to prevent tampering or deletion.
-- Categorization of cases (Pending, Closed, Under Investigation).
 - Detailed suspect profiles and case descriptions.
 - Search, filter, and sort crime records for efficient management.
 
