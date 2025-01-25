@@ -1,4 +1,4 @@
-import { parseStringify } from "../utils";
+ import { parseStringify } from "../utils";
 
 export const getAllRecords = () => {
   const allrecords = {

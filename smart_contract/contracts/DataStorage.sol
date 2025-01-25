@@ -5,10 +5,9 @@ contract CriminalRecordStorage {
     
     mapping(string => string) private mongoIdToHash;
 
-   
-    event RecordStored(string mongoId, string hash);
 
-  
+    event RecordStored(string mongoId, string hash);
+    //for storing hash and mongoid
     function storeRecord(string calldata mongoId, string calldata hash) external {
         require(bytes(mongoId).length > 0, "MongoDB ID cannot be empty");
         require(bytes(hash).length > 0, "Hash cannot be empty");
@@ -19,7 +18,7 @@ contract CriminalRecordStorage {
         emit RecordStored(mongoId, hash);
     }
       
-   
+   //for getting hash from mongoid
     function getHash(string calldata mongoId) external view returns (string memory) {
         string memory hash = mongoIdToHash[mongoId];
         require(bytes(hash).length > 0, "No record found for the given MongoDB ID");

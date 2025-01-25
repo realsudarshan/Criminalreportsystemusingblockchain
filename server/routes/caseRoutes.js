@@ -7,7 +7,6 @@ const {
   addToBlockchain,
   fetchAllDataFromDatabase
 } = require('../controllers/caseController');
-
 router.post('/add', addToDB);
 router.get('/validate/:id', validate);
 router.get('/view/:id', viewFromDB);
