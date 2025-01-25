@@ -7,7 +7,7 @@ const CONTRACT_ABI = [
   "function storeRecord(string calldata mongoId, string calldata hash) external",
   "function getHash(string calldata mongoId) external view returns (string)"
 ]; 
-
+// contract instance creation
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
@@ -26,6 +26,7 @@ exports.addToDB = async (req, res) => {
 
 
 exports.validate = async (req, res) => {
+  //data validation by  comparing database hash with blockchain hash
   try {
     const crimeCase = await Case.findById(req.params.id);
 
@@ -59,6 +60,7 @@ exports.validate = async (req, res) => {
 
 
 exports.viewFromDB = async (req, res) => {
+  //retrive data from database
   try {
     const crimeCase = await Case.findById(req.params.id);
 
@@ -74,6 +76,7 @@ exports.viewFromDB = async (req, res) => {
 
 
 exports.addToBlockchain = async (req, res) => {
+  //hash and mongoid saved in contract
   try {
     const crimeCase = await Case.findById(req.params.id);
 
@@ -112,6 +115,7 @@ console.log(reportHash)
 
 
 exports.fetchAllDataFromDatabase = async (req, res) => {
+  //retrive all data from database
   try {
     const allCases = await Case.find();
     res.json({ cases: allCases });
