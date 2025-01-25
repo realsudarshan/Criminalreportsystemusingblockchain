@@ -93,7 +93,6 @@ export const RegisterFormDefaultValues = {
   officerInCharge: "",
   firno: "",
   filedby: "",
-  lastUpdated: "",
   reportStatus: "notsaved",
   caseDescription: "",
 };

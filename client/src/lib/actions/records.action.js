@@ -2,9 +2,9 @@ import { parseStringify } from "../utils";
 
 export const getAllRecords = () => {
   const allrecords = {
-    totalDraftedCases: 15,
-    totalClosedCases: 25,
-    totalUnderInvestigation: 10,
+    totalCases: 15,
+    savedCases: 25,
+    unsavedCases: 10,
     crimeReports: [
       {
         crimeID: "CR-1001",

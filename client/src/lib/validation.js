@@ -27,7 +27,7 @@ export const RegisterFormValidation = z.object({
   }),
   suspect: z.object({
     name: z.string().min(5, "Name must be at least 5 characters"),
-    img: z.string().optional(),
+    img: z.array(z.any()).nonempty("At least one profile image is required"),
     contact: z
       .string()
       .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
@@ -45,7 +45,9 @@ export const RegisterFormValidation = z.object({
     evidenceDescription: z
       .string()
       .nonempty("Evidence description is required"),
-      evidenceImage: z.string().optional(),
+    evidenceImage: z
+      .array(z.any())
+      .nonempty("At least one evidence image is required"),
   }),
   status: z.enum([
     "closed",
@@ -57,6 +59,6 @@ export const RegisterFormValidation = z.object({
   officerInCharge: z.string().nonempty("Officer in charge is required"),
   firno: z.string().nonempty("FIR number is required"),
   filedby: z.string().optional(),
-  reportStatus: z.enum(["saved", "notsaved"]),
+  reportStatus: z.string().optional(),
   caseDescription: z.string().nonempty("Case description is required"),
 });

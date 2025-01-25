@@ -266,6 +266,11 @@
     @apply space-y-5 bg-dark-400 border-dark-500 outline-none !important;
   }
 
+  /*change the tab bg color*/
+  .shad-tabs-list {
+    @apply bg-dark-400 !important;
+  }
+
   .shad-sheet-content button {
     @apply top-2 focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }

@@ -10,7 +10,7 @@ const SubmitButton = ({ isLoading, className, children }) => {
     >
       {isLoading ? (
         <div className="flex items-center gap-4">
-          <Image
+          <img
             src="/assets/icons/loader.svg"
             alt="loader"
             width={24}

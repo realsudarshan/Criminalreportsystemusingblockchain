@@ -5,7 +5,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "@/lib/axios";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,22 +17,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { decryptKey } from "@/lib/utils";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns }) {
   const redirect = useNavigate();
-  const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
+  const [data, setData] = useState([]);
 
-  //   useEffect(() => {
-  //     const accessKey = encryptedKey && decryptKey(encryptedKey);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/fetch-all");
+        setData(response.data.crimeReports);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //     if (accessKey !== import.meta.env.VITE_PUBLIC_ADMIN_PASSKEY.toString()) {
-  //       redirect("/");
-  //     }
-  //   }, [encryptedKey]);
+    fetchData();
+  }, []);
 
   const table = useReactTable({
     data,
@@ -63,13 +65,13 @@ export function DataTable({ columns, data }) {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows?.map((row) => (
               <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                key={row?.id}
+                data-state={row?.getIsSelected() && "selected"}
                 className="shad-table-row"
               >
-                {row.getVisibleCells().map((cell) => (
+                {row?.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
@@ -78,7 +80,7 @@ export function DataTable({ columns, data }) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={columns?.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

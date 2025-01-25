@@ -1,18 +1,37 @@
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
+import { useEffect, useState } from "react";
 import { getAllRecords } from "@/lib/actions/records.action";
 import { useSearchParams } from "react-router";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@/components/ui/button";
+import axios from "@/lib/axios";
 
 const Dashboard = () => {
-  const records = getAllRecords();
   const { logout } = useAuth0();
   const [searchParams] = useSearchParams();
   const isAdmin = searchParams.get("admin") === "true";
   const isKey = window.localStorage.getItem("accessKey");
+  const [records, setRecords] = useState();
+
+  useEffect(() => {
+    fetchAllRecords();
+  }, []);
+
+  const fetchAllRecords = async () => {
+    try {
+      const res = await axios.get("/fetch-all");
+      if (res.status === 200) {
+        console.log(res.data);
+        setRecords(res.data);
+        console.log("Fetched all records successfully");
+      }
+    } catch {
+      console.log("Error fetching records");
+    }
+  };
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
@@ -46,25 +65,24 @@ const Dashboard = () => {
         <section className="admin-stat">
           <StatCard
             type="closed"
-            count={records.totalClosedCases}
+            count={records?.totalCases}
             label="Total Cases"
             icon={"/assets/icons/closed.svg"}
           />
           <StatCard
             type="under-investigation"
-            count={records.totalUnderInvestigation}
+            count={records?.savedCases}
             label="Saved Cases"
             icon={"/assets/icons/save.svg"}
           />
           <StatCard
             type="drafted"
-            count={records.totalDraftedCases}
+            count={records?.unsavedCases}
             label="Unsaved Cases"
             icon={"/assets/icons/unsave.svg"}
           />
         </section>
-
-        <DataTable columns={columns} data={records.crimeReports} />
+        <DataTable columns={columns} data={records?.crimeReports} />
       </main>
     </div>
   );

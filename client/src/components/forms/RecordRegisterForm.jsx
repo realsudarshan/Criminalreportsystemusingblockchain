@@ -36,8 +36,10 @@ const RecordRegisterForm = () => {
       ...RegisterFormDefaultValues,
     },
   });
+
+  console.log(form.formState.errors)
+
   const onSubmit = async (values) => {
-    console.log(values);
     setIsLoading(true);
     try {
       const crime_id = "CR-" + Math.floor(1000 + Math.random() * 9000);
@@ -79,11 +81,11 @@ const RecordRegisterForm = () => {
         reportStatus: values.reportStatus,
         caseDescription: values.caseDescription,
       };
-      console.log(crimeReport);
-      const res = axios.post("/app",crimeReport);
-      console.log(res);
-      console.log(crimeReport);
-      alert("New Record created");
+      const res = await axios.post("/add", crimeReport);
+      if (res.status === 201) {
+        window.localStorage.clear();
+        logout({ logoutParams: { returnTo: window.location.origin } });
+      }
     } catch (error) {
       console.log(error);
     }
