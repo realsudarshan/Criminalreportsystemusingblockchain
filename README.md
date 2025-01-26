@@ -14,6 +14,7 @@ A secure portal for police authorities to manage crime records, ensuring transpa
 - Blockchain/Smart Contract: Solidity
 - Testnet: Ethereum Sepolia
 
+
 ## System Overview
 
 The Criminal Report Management System consists of four main components:

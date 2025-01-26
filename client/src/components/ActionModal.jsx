@@ -1,23 +1,35 @@
 import { useState } from "react";
-
-import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import "react-datepicker/dist/react-datepicker.css";
-
-export const ActionModal = ({ type, title }) => {
-  
-  const [open, setOpen] = useState(false);
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import axios from "@/lib/axios";
+import { toast } from "sonner";
+export const ActionModal = ({ type, id }) => {
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.get(`/add-to-blockchain/${id}`);
+      if (res.status === 201) {
+        console.log(res.data);
+        toast("Record added to blockchain");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <Button
           variant={type === "Edit" ? "outline" : "ghost"}
           className={`capitalize ${
@@ -26,15 +38,22 @@ export const ActionModal = ({ type, title }) => {
         >
           {type}
         </Button>
-      </DialogTrigger>
-      <DialogContent className="shad-dialog sm:max-w-md">
-        <DialogHeader className="mb-4 space-y-3">
-          <DialogTitle className="capitalize">{title}</DialogTitle>
-          <DialogDescription>
-            Please fill in the following details to {type} records
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently add crime report
+            on the blockchain
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => handleSubmit()}>
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

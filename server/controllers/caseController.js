@@ -49,7 +49,7 @@ exports.validate = async (req, res) => {
 
     const isSame = currentHash === blockchainRecord;
 
-    res.json({
+    res.status(200).json({
       report: crimeCase,
       currentHash,
       blockchainStoredHash: blockchainRecord,
@@ -84,6 +84,7 @@ exports.viewFromDB = async (req, res) => {
 exports.addToBlockchain = async (req, res) => {
   //hash and mongoid saved in contract
   try {
+    console.log(req.params.id);
     const crimeCase = await Case.findById(req.params.id);
 
     if (!crimeCase) {
@@ -92,6 +93,11 @@ exports.addToBlockchain = async (req, res) => {
 
     const canonicalData = getCanonicalRepresentation(crimeCase);
     console.log("Data from server", canonicalData);
+
+    //update report status
+    crimeCase.reportStatus = "saved";
+    await crimeCase.save();
+    
     const reportHash = ethers.keccak256(
       ethers.toUtf8Bytes(JSON.stringify(canonicalData))
     );
@@ -127,11 +133,9 @@ exports.fetchAllDataFromDatabase = async (req, res) => {
   try {
     const allCases = await Case.find();
     const totalCases = allCases.length;
-    const savedCases = allCases.filter((crimeCase) => {
-      console.log(crimeCase.reportStatus);
-      crimeCase.reportStatus === "saved";
-    }).length;
-    console.log(savedCases);
+    const savedCases = allCases.filter(
+      (crimeCase) => crimeCase.reportStatus === "saved"
+    ).length;
     const unsavedCases = allCases.filter(
       (crimeCase) => crimeCase.reportStatus === "notsaved"
     ).length;

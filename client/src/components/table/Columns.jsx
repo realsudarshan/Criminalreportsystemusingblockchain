@@ -2,7 +2,7 @@ import { Officer } from "@/constants";
 import { StatusBadge } from "../StatusBadge";
 import { ActionModal } from "../ActionModal";
 import ViewButton from "../ViewButton";
-
+import ValidateButton from "../ValidateButton";
 const isKey = window.localStorage.getItem("accessKey");
 
 export const columns = [
@@ -81,23 +81,24 @@ export const columns = [
   },
   {
     id: "actions",
-    header: () => <div className="pl-1">Actions</div>,
+    header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => {
       const records = row?.original;
+      console.log(records._id);
       return (
         <>
           <div className="flex gap-1 items-center justify-center">
             {records.reportStatus === "saved" ? (
-              <ActionModal type="Validate" title="Verify Records" />
+              <ValidateButton title="Validate" id={records._id} />
             ) : (
               <>
                 {records.status === "closed" && isKey && (
-                  <ActionModal type="Save" title="Save Records" />
+                  <ActionModal type="Save" id={records._id} />
                 )}
               </>
             )}
+            <ViewButton title="View" records={records} />
           </div>
-          <ViewButton title="View" records={records} />
         </>
       );
     },
