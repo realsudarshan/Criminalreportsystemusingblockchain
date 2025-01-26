@@ -4,6 +4,7 @@ import { ActionModal } from "../ActionModal";
 import ViewButton from "../ViewButton";
 import ValidateButton from "../ValidateButton";
 const isKey = window.localStorage.getItem("accessKey");
+const userRole = window.localStorage.getItem("userRole");
 
 export const columns = [
   {
@@ -60,7 +61,7 @@ export const columns = [
             alt="doctor"
             width={100}
             height={100}
-            className="size-8"
+            className="size-8 rounded-full"
           />
           <p className="whitespace-nowrap">{officer?.name}</p>
         </div>
@@ -92,9 +93,11 @@ export const columns = [
               <ValidateButton title="Validate" id={records._id} />
             ) : (
               <>
-                {records.status === "closed" && isKey && (
-                  <ActionModal type="Save" id={records._id} />
-                )}
+                {records.status === "closed" &&
+                  isKey &&
+                  userRole === "validator" && (
+                    <ActionModal type="Save" id={records._id} />
+                  )}
               </>
             )}
             <ViewButton title="View" records={records} />

@@ -83,8 +83,7 @@ const RecordRegisterForm = () => {
       };
       const res = await axios.post("/add", crimeReport);
       if (res.status === 201) {
-        window.localStorage.clear();
-        logout({ logoutParams: { returnTo: window.location.origin } });
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
