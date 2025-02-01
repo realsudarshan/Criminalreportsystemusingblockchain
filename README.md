@@ -61,3 +61,95 @@ R -->|Yes| S[✔ Data Validated]
 R -->|No| T[❌ Data Not Validated] 
 S --> U[🏁 End] 
 T --> U
+```
+# Local Setup Guide
+
+## Prerequisites
+- Node.js (v16+)
+- npm or yarn
+- Metamask browser extension
+- Ethereum wallet
+
+## Setup Steps
+
+### 1. Alchemy RPC URL Setup
+1. Go to [Alchemy](https://www.alchemy.com/)
+2. Create a free account
+3. Create a new app
+4. Select "Ethereum" and "Sepolia" network
+5. Copy the HTTP RPC URL
+
+### 2. Metamask Installation
+1. Install [Metamask browser extension](https://metamask.io/download/)
+2. Create a new wallet
+3. Switch to Sepolia Testnet
+   - Click network dropdown
+   - Select "Add Network"
+   - Choose "Ethereum Sepolia"
+
+### 3. Private Key Configuration
+1. In Metamask:
+   - Click account menu
+   - Select "Account Details"
+   - Click "Export Private Key"
+   - Enter wallet password
+   - Copy private key
+
+### 4. Sepolia Testnet Ethereum
+1. Use [Sepolia Faucets](https://sepoliafaucet.com/)
+2. Connect Metamask wallet
+3. Request test ETH
+4. Confirm transaction in Metamask
+
+### 5. Project Configuration
+```bash
+# Clone repository
+git clone [your-repo-url]
+cd [project-directory]
+
+# Install dependencies
+npm install
+
+# Create .env file
+touch .env
+
+# Add to .env
+RPC_URL=your_alchemy_rpc_url
+PRIVATE_KEY=your_metamask_private_key
+```
+
+### 6. Run Project
+```bash
+cd smart_contract
+# Compile contracts
+npx hardhat compile
+
+# Deploy to Sepolia
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+## Security Notes
+- Never share private key
+- Use testnet for development
+- Store .env in .gitignore
+
+# After deployment
+- copy the contract adress in the console
+- view from sepolia blockchain explorer
+- Get the mongo_uri from cloud 
+- Open the .env.example of server and fill the data by creating .env file
+- Do "npm run dev" in both frontend and backend
+
+
+# Screenshots 
+- Home page
+![Home page](./assests/homepage.jpeg)
+- Operational officer report submission form
+![Submit form](./assests/oo1.jpeg)
+![Submit form](./assests/oo2.jpeg)
+![Submit form](./assests/oo3.jpeg)
+![Submit form](./assests/oo4.jpeg)
+- Extra pin security for Senior officer
+![Pin for so](assests/sopin.jpeg)
+- Dashboard for Senior officer
+![Senior officer](./assests/oodashboard.jpeg)
