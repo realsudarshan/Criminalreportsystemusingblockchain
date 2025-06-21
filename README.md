@@ -20,8 +20,6 @@ A secure portal for police authorities to manage crime records, ensuring transpa
 
 ---
 
-## 👥 Contributors ✨  
-👑 **[Utsav](https://github.com/utsavdotdev)** – Frontend  
 
 ---
 
